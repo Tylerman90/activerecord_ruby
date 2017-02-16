@@ -7,12 +7,14 @@
 <body>
 	<h1>Home Page</h1>
 
+	<% if @current_user %>
+	Now logged in as: <%= @current_user.email %>
+	<% end %>
 
 	<% if session[:user_id] %>
-	<a href="/sign-out">Log Out</a>
-	Now logged in as: <%= @user.email %>
+		<a href="/sign-out">Log Out</a>
 	<% else %>
-	<a href="/sign_in">Log In</a>
+		<a href="/sign_in">Log In</a>
 	<% end %>
 
 	<%= flash[:notice] if flash[:notice] %>

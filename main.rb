@@ -11,9 +11,9 @@ get '/' do
 	@posts = Post.all
 	@user = User.find(session[:user_id]) if session[:user_id]
 
-	session[:visited] = true
+	session[:visited] = "I'm Here!"
 
-	p session[:visited] = "I'm Here!"
+	p session[:visited]
 
 	erb :home
 end
@@ -21,7 +21,6 @@ end
 
 
 post '/posts' do
-	params.inspect
 	post = Post.new
 
 	post.title = params["title"]
@@ -68,13 +67,17 @@ end
 
 post "/sessions/new" do
 	user = User.where(email: params[:email]).first
-if user
 
-	session[:user_id] = user.id
-	flash[:notice] = "You've successfully signed in"
-end
+	if user && user.password == params[:password]
+		session[:user_id] = user.id
+		flash[:notice] = "You've successfully signed in"
 
-	redirect "/"
+		redirect "/"
+	else
+		flash[:notice] = "Incorrect information."
+		redirect "/sign_in"
+	end
+		
 end
 
 get "/sign-out" do
@@ -84,11 +87,9 @@ get "/sign-out" do
 	redirect "/"
 end
 
-
-
-
-
-
+def current_user
+	@current_user = User.find(session[:user_id])
+end
 
 
 
